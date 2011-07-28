@@ -1,7 +1,7 @@
 /*!
  * D8 - The next generation Date object for JavaScript
  *
- * Copyright (C) 2001 by Panacoda GmbH
+ * Copyright (C) 2011 by Panacoda GmbH
  * MIT Licensed
  *
  * @author Dominik Laubach
