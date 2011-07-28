@@ -5,6 +5,7 @@
  * MIT Licensed
  *
  * @author Dominik Laubach
+ * @version 0.1
  */
 
 var D8 = (function() {
