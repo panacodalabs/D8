@@ -12,12 +12,6 @@ var D8 = (function() {
 
     var date = null;
 
-    function now() {
-        var date = new D8();
-        date.date = new Date();
-        return date;
-    }
-
     function addDays(days) {
         return this.addMilliseconds(days * 24 * 60 * 60 * 1000);
     }
@@ -182,7 +176,7 @@ var D8 = (function() {
 
     function getDatesOfCalendarWeek(startWeekOnMonday) {
         year = this.format('yyyy');
-        var newYear = this.create('01/01/' + year);
+        var newYear = D8.create('01/01/' + year);
         var newYearWeekDay = newYear.format('D');
 
         var firstWeek = null;
@@ -199,34 +193,11 @@ var D8 = (function() {
         var dates = [];
         for (var i = 0; i < 7; i++) {
             var date = requiredWeek.addDays(i);
-            date = this.create(date.format('mm') + '/' + date.format('dd') + '/' + date.format('yyyy'));
+            date = D8.create(date.format('mm') + '/' + date.format('dd') + '/' + date.format('yyyy'));
             dates.push(date);
         }
 
         return dates;
-    }
-
-    function create(dateString) {
-        var milliseconds = typeof(dateString) === 'number' ? dateString : null;
-
-        if (!milliseconds) {
-            var regexResult = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/.exec(dateString);
-            if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
-                var date = dateString.split(' ');
-                dateString = regexResult[2] + '/' + regexResult[1] + '/' + regexResult[3] + (date[1] ? ' ' + date[1] : '');
-            }
-            milliseconds = Date.parse(dateString);
-        }
-
-        if (dateString && !milliseconds) {
-            throw('Error: Invalid dateString \'' + dateString + '\' passed to create().');
-        } else if (!dateString) {
-            return this.now();
-        }
-
-        var date = new D8();
-        date.date = new Date(milliseconds);
-        return date;
     }
 
     function isLeapYear() {
@@ -236,7 +207,6 @@ var D8 = (function() {
 
     return {
         date: new Date(),
-        now: now,
         addDays: addDays,
         addHours: addHours,
         addMinutes: addMinutes,
@@ -249,11 +219,16 @@ var D8 = (function() {
         getCalendarWeek: getCalendarWeek,
         format: format,
         getDatesOfCalendarWeek: getDatesOfCalendarWeek,
-        create: create,
         isLeapYear: isLeapYear
     };
 
 });
+
+D8.now = function() {
+    var date = new D8();
+    date.date = new Date();
+    return date;
+}
 
 D8.getCalendarWeek = (function(year, month, day) {
     var a = Math.floor((14 - (month)) / 12);
@@ -269,7 +244,7 @@ D8.getCalendarWeek = (function(year, month, day) {
 });
 
 D8.getDatesOfCalendarWeek = (function(calendarWeek, startWeekOnMonday, year) {
-    year = year && !isNaN(year) ? year : (this.date ? this.format('yyyy') : this.now().format('yyyy'));
+    year = year && !isNaN(year) ? year : (this.date ? this.format('yyyy') : D8.now().format('yyyy'));
     var newYear = this.create('01/01/' + year);
     var newYearWeekDay = newYear.format('D');
 
@@ -322,7 +297,7 @@ D8.create = (function(dateString) {
     if (dateString && !milliseconds) {
         throw('Error: Invalid dateString \'' + dateString + '\' passed to create().');
     } else if (!dateString) {
-        return this.now();
+        return D8.now();
     }
 
     var date = new D8();
