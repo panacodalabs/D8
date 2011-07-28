@@ -228,6 +228,11 @@ var D8 = (function() {
         return date;
     }
 
+    function isLeapYear() {
+        var year = Number(this.format('yyyy'));
+        return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+    }
+
     return {
         date: new Date(),
         now: now,
@@ -243,7 +248,8 @@ var D8 = (function() {
         getCalendarWeek: getCalendarWeek,
         format: format,
         getDatesOfCalendarWeek: getDatesOfCalendarWeek,
-        create: create
+        create: create,
+        isLeapYear: isLeapYear
     };
 
 });
@@ -321,6 +327,19 @@ D8.create = (function(dateString) {
     var date = new D8();
     date.date = new Date(milliseconds);
     return date;
+});
+
+D8.isLeapYear = (function(year) {
+    if(year) {
+        year = Number(year);
+        if(year) {
+            return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+        } else {
+            throw 'No valid year (number) passed.';
+        }
+    } else {
+        throw 'No year passed.';
+    }
 });
 
 var Ø = D8;
