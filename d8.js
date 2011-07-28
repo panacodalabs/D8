@@ -294,13 +294,13 @@ D8.getDatesOfCalendarWeek = (function(calendarWeek, startWeekOnMonday, year) {
     return dates;
 });
 
-D8.getDateByWeekdayAndCalendarWeek = (function(calendarWeek, dayOfWeek, year) {
-    if (calendarWeek && !isNaN(calendarWeek) && ((dayOfWeek && !isNaN(dayOfWeek)) || dayOfWeek === 0)) {
+D8.getDateByWeekdayAndCalendarWeek = (function(weekDay, calendarWeek, year) {
+    if (calendarWeek && !isNaN(calendarWeek) && ((weekDay && !isNaN(weekDay)) || weekDay === 0)) {
         var dates = this.getDatesOfCalendarWeek(calendarWeek, false, year);
-        if (dates && dates.length > 0 && dates[dayOfWeek]) {
-            return dates[dayOfWeek];
+        if (dates && dates.length > 0 && dates[weekDay]) {
+            return dates[weekDay];
         } else {
-            throw('Error: Day ' + dayOfWeek + ' of calendar week ' + calendarWeek + ' could not be found!');
+            throw('Error: Day ' + weekDay + ' of calendar week ' + calendarWeek + ' could not be found!');
         }
     } else {
         throw('Error: Please pass a valid calendarWeek and a valid day of the week!');

@@ -10,7 +10,7 @@ Usage
 -------
 
     var d1 = new Ø();
-    var d2 = new Ø.create('12/31/2011');
+    var d2 = Ø.create('12/31/2011');
 
     d1.format('mm/dd/yyyy');
     // 07/28/2011
@@ -54,7 +54,7 @@ Usage
     // 07/29/2011
     // 07/30/2011
 
-    var d5 = Ø.getDateByWeekdayAndCalendarWeek(30, 4, 2011);
+    var d5 = Ø.getDateByWeekdayAndCalendarWeek(4, 30, 2011);
     d5.format('mm/dd/yyyy');
     // 07/28/2011
 
