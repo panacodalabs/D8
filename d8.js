@@ -51,29 +51,35 @@ var D8 = (function() {
         return this.date.getTime();
     }
 
-    function timeBetween(date, returnType) {
+    function timeBetween(date, returnType, round) {
         var firstDateInMilliseconds = this.getTimestamp() ? this.getTimestamp() : null;
         var secondDateInMilliseconds = date.getTimestamp() ? date.getTimestamp() : null;
+        round = !(round === false);
 
         if (firstDateInMilliseconds && secondDateInMilliseconds) {
+            var timeBetween;
             switch (returnType) {
                 case 'days':
-                    return (secondDateInMilliseconds - firstDateInMilliseconds) / (24 * 60 * 60 * 1000);
+                    timeBetween = (secondDateInMilliseconds - firstDateInMilliseconds) / (24 * 60 * 60 * 1000);
                     break;
                 case 'hours':
-                    return (secondDateInMilliseconds - firstDateInMilliseconds) / (60 * 60 * 1000);
+                    timeBetween = (secondDateInMilliseconds - firstDateInMilliseconds) / (60 * 60 * 1000);
                     break;
                 case 'minutes':
-                    return (secondDateInMilliseconds - firstDateInMilliseconds) / (60 * 1000);
+                    timeBetween = (secondDateInMilliseconds - firstDateInMilliseconds) / (60 * 1000);
                     break;
                 case 'seconds':
-                    return (secondDateInMilliseconds - firstDateInMilliseconds) / 1000;
+                    timeBetween = (secondDateInMilliseconds - firstDateInMilliseconds) / 1000;
                     break;
                 case 'milliseconds':
                 default:
-                    return (secondDateInMilliseconds - firstDateInMilliseconds);
+                    timeBetween = (secondDateInMilliseconds - firstDateInMilliseconds);
                     break;
             }
+            if(round) {
+                timeBetween = Math.round(timeBetween);
+            }
+            return timeBetween;
         } else if (firstDateInMilliseconds) {
             throw('Error: Invalid d8 object passed when calling timeBetween()!');
         } else {
