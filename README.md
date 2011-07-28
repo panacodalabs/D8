@@ -15,6 +15,12 @@ Usage
     d1.format('mm/dd/yyyy');
     // 07/28/2011
 
+    d2.isLeapYear();
+    // false
+
+    D8.isLeapYear(2012);
+    // true
+
     d1.getCalendarWeek();
     // 30
 
