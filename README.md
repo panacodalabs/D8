@@ -9,8 +9,8 @@ D8 is a lightweight JavaScript library, that wraps JS's date object and extends 
 Usage
 -------
 
-    var d1 = new Ø();
-    var d2 = Ø.create('12/31/2011');
+    var d1 = new d8(); // var d1 = new Ø();
+    var d2 = d8.create('12/31/2011');
 
     d1.format('mm/dd/yyyy');
     // 07/28/2011
@@ -18,7 +18,7 @@ Usage
     d2.isLeapYear();
     // false
 
-    Ø.isLeapYear(2012);
+    d8.isLeapYear(2012);
     // true
 
     d1.getCalendarWeek();
@@ -54,7 +54,7 @@ Usage
     // 07/29/2011
     // 07/30/2011
 
-    var d5 = Ø.getDateByWeekdayAndCalendarWeek(4, 30, 2011);
+    var d5 = d8.getDateByWeekdayAndCalendarWeek(4, 30, 2011);
     d5.format('mm/dd/yyyy');
     // 07/28/2011
 
