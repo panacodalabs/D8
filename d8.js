@@ -169,9 +169,13 @@ var D8 = (function() {
             S:    ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
         };
 
-        return format.replace(token, function ($0) {
+        var result = format.replace(token, function ($0) {
             return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
         });
+        if(Number(result) == result) {
+            return Number(result);
+        }
+        return result;
     }
 
     function getDatesOfCalendarWeek(startWeekOnMonday) {
