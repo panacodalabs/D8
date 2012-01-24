@@ -294,6 +294,12 @@ D8.create = (function(dateString) {
         if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
             var date = dateString.split(' ');
             dateString = regexResult[2] + '/' + regexResult[1] + '/' + regexResult[3] + (date[1] ? ' ' + date[1] : '');
+        } else {
+            regexResult = /(\d{2,4})-(\d{1,2})-(\d{1,2})/.exec(dateString);
+            if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
+                date = dateString.split(' ');
+                dateString = regexResult[2] + '/' + regexResult[3] + '/' + regexResult[1] + (date[1] ? ' ' + date[1] : '');
+            }
         }
         milliseconds = Date.parse(dateString);
     }
