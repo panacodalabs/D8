@@ -297,11 +297,13 @@ D8.create = (function(dateString) {
         } else {
             regexResult = /(\d{2,4})-(\d{1,2})-(\d{1,2})/.exec(dateString);
             if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
-                date = dateString.split(' ');
+                date = dateString.split('T');
+                date[1] = date[1] ? date[1].replace(/([0-9]{2}:[0-9]{2})[0-9:\.]*Z/g, ' $1') : null;
                 dateString = regexResult[2] + '/' + regexResult[3] + '/' + regexResult[1] + (date[1] ? ' ' + date[1] : '');
+                var offset = -1 * ((new Date()).getTimezoneOffset() * 60 * 1000);
             }
         }
-        milliseconds = Date.parse(dateString);
+        milliseconds = Date.parse(dateString) + offset;
     }
 
     if (dateString && !milliseconds) {
