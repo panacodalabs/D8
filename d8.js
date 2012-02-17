@@ -286,11 +286,11 @@ D8.getDateByWeekdayAndCalendarWeek = (function(weekDay, calendarWeek, year) {
     }
 });
 
-D8.create = (function(dateString) {
-    var date, milliseconds = typeof(dateString) === 'number' ? dateString : null;
+D8.create = function(dateString) {
+    var date, offset, regexResult, milliseconds = typeof dateString === 'number' ? dateString : null;
 
     if (!milliseconds) {
-        var regexResult = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/.exec(dateString);
+        regexResult = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/.exec(dateString);
         if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
             date = dateString.split(' ');
             dateString = regexResult[2] + '/' + regexResult[1] + '/' + regexResult[3] + (date[1] ? ' ' + date[1] : '');
@@ -303,12 +303,12 @@ D8.create = (function(dateString) {
                 
             }
         }
-        var offset = -1 * ((new Date()).getTimezoneOffset() * 60 * 1000);
+        offset = -1 * ((new Date()).getTimezoneOffset() * 60 * 1000);
         milliseconds = Date.parse(dateString) + offset;
     }
 
     if (dateString && !milliseconds) {
-        throw('Error: Invalid dateString \'' + dateString + '\' passed to create().');
+        throw 'Error: Invalid dateString \'' + dateString + '\' passed to create().';
     } else if (!dateString) {
         return D8.now();
     }
@@ -316,7 +316,7 @@ D8.create = (function(dateString) {
     date = new D8();
     date.date = new Date(milliseconds);
     return date;
-});
+};
 
 D8.isLeapYear = (function(year) {
     if(year) {
