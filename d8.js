@@ -5,7 +5,7 @@
  * MIT Licensed
  *
  * @author Dominik Laubach
- * @version 0.1
+ * @version 0.1.6
  */
 
 var D8 = (function() {
@@ -287,12 +287,12 @@ D8.getDateByWeekdayAndCalendarWeek = (function(weekDay, calendarWeek, year) {
 });
 
 D8.create = (function(dateString) {
-    var milliseconds = typeof(dateString) === 'number' ? dateString : null;
+    var date, milliseconds = typeof(dateString) === 'number' ? dateString : null;
 
     if (!milliseconds) {
         var regexResult = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/.exec(dateString);
         if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
-            var date = dateString.split(' ');
+            date = dateString.split(' ');
             dateString = regexResult[2] + '/' + regexResult[1] + '/' + regexResult[3] + (date[1] ? ' ' + date[1] : '');
         } else {
             regexResult = /(\d{2,4})-(\d{1,2})-(\d{1,2})/.exec(dateString);
@@ -300,9 +300,10 @@ D8.create = (function(dateString) {
                 date = dateString.split('T');
                 date[1] = date[1] ? date[1].replace(/([0-9]{2}:[0-9]{2})[0-9:\.]*Z/g, ' $1') : null;
                 dateString = regexResult[2] + '/' + regexResult[3] + '/' + regexResult[1] + (date[1] ? ' ' + date[1] : '');
-                var offset = -1 * ((new Date()).getTimezoneOffset() * 60 * 1000);
+                
             }
         }
+        var offset = -1 * ((new Date()).getTimezoneOffset() * 60 * 1000);
         milliseconds = Date.parse(dateString) + offset;
     }
 
@@ -312,7 +313,7 @@ D8.create = (function(dateString) {
         return D8.now();
     }
 
-    var date = new D8();
+    date = new D8();
     date.date = new Date(milliseconds);
     return date;
 });
