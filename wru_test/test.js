@@ -1,4 +1,4 @@
-var date,date2, date3;
+var date, date2, date3;
 
 wruTest.test([
     {
