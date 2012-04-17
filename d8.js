@@ -76,9 +76,9 @@ var D8 = (function() {
             }
             return timeBetween;
         } else if (firstDateInMilliseconds) {
-            throw('Error: Invalid d8 object passed when calling timeBetween()!');
+            throw('Error: Invalid D8 object passed when calling timeBetween()!');
         } else {
-            throw('Error: Trying to access timeBetween() on an invalid d8 object.');
+            throw('Error: Trying to access timeBetween() on an invalid D8 object.');
         }
     }
 
@@ -101,7 +101,7 @@ var D8 = (function() {
 
     function format(format, utc) {
         if (isNaN(this.getTimestamp())) {
-            throw('Error: Trying to access format() on an invalid d8 object.');
+            throw('Error: Trying to access format() on an invalid D8 object.');
         }
 
         var token = /d{1,4}|D{1}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g;

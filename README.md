@@ -18,7 +18,7 @@ Usage
     d2.isLeapYear();
     // false
 
-    d8.isLeapYear(2012);
+    D8.isLeapYear(2012);
     // true
 
     d1.getCalendarWeek();
