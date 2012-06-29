@@ -99,6 +99,12 @@ var D8 = (function() {
         return calendarWeek;
     }
 
+    /**
+     *
+     * This code was written by Steven Levithan http://blog.stevenlevithan.com/archives/date-time-format
+     * Kudos to him for writing and publishing it.
+     *
+    **/
     function format(format, utc) {
         if (isNaN(this.getTimestamp())) {
             throw('Error: Trying to access format() on an invalid D8 object.');
