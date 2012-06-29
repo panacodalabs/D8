@@ -5,7 +5,7 @@
  * MIT Licensed
  *
  * @author Dominik Laubach
- * @version 0.1.6
+ * @version 0.2
  */
 
 var D8 = (function() {
@@ -76,9 +76,9 @@ var D8 = (function() {
             }
             return timeBetween;
         } else if (firstDateInMilliseconds) {
-            throw('Error: Invalid d8 object passed when calling timeBetween()!');
+            throw('Error: Invalid D8 object passed when calling timeBetween()!');
         } else {
-            throw('Error: Trying to access timeBetween() on an invalid d8 object.');
+            throw('Error: Trying to access timeBetween() on an invalid D8 object.');
         }
     }
 
@@ -101,7 +101,7 @@ var D8 = (function() {
 
     function format(format, utc) {
         if (isNaN(this.getTimestamp())) {
-            throw('Error: Trying to access format() on an invalid d8 object.');
+            throw('Error: Trying to access format() on an invalid D8 object.');
         }
 
         var token = /d{1,4}|D{1}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g;
@@ -287,29 +287,23 @@ D8.getDateByWeekdayAndCalendarWeek = (function(weekDay, calendarWeek, year) {
 });
 
 D8.create = function(dateString) {
-    var date, offset, regexResult, milliseconds = typeof dateString === 'number' ? dateString : null;
+    var date, regexResult, milliseconds = typeof dateString === 'number' ? dateString : null;
 
     if (!milliseconds) {
         regexResult = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/.exec(dateString);
         if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
             date = dateString.split(' ');
             dateString = regexResult[2] + '/' + regexResult[1] + '/' + regexResult[3] + (date[1] ? ' ' + date[1] : '');
-        } else {
-            regexResult = /(\d{2,4})-(\d{1,2})-(\d{1,2})/.exec(dateString);
-            if (regexResult && regexResult[1] && regexResult[2] && regexResult[3]) {
-                date = dateString.split('T');
-                date[1] = date[1] ? date[1].replace(/([0-9]{2}:[0-9]{2})[0-9:\.]*Z/g, ' $1') : null;
-                dateString = regexResult[2] + '/' + regexResult[3] + '/' + regexResult[1] + (date[1] ? ' ' + date[1] : '');
-                
-            }
         }
-        offset = -1 * ((new Date()).getTimezoneOffset() * 60 * 1000);
-        milliseconds = Date.parse(dateString) + offset;
+
+        try {
+            milliseconds = Date.parse(dateString);
+        } catch(e) {
+            throw 'Error: Invalid dateString \'' + dateString + '\' passed to create().';
+        }
     }
 
-    if (dateString && !milliseconds) {
-        throw 'Error: Invalid dateString \'' + dateString + '\' passed to create().';
-    } else if (!dateString) {
+    if (!milliseconds) {
         return D8.now();
     }
 
