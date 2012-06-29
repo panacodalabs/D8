@@ -62,3 +62,4 @@ License
 -------
 
 D8 is licensed under the MIT license.
+format() method by Steven Levithan http://blog.stevenlevithan.com/archives/date-time-format
