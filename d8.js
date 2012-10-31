@@ -127,15 +127,6 @@
                 date = undefined;
             }
 
-            var day_names = [
-                "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
-                "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-            ]
-            var month_names = [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-            ];
-
             var _ = utc ? "getUTC" : "get";
             var d = this.date[_ + "Date"]();
             var D = this.date[_ + "Day"]();
@@ -149,13 +140,13 @@
             var flags = {
                 d:    d,
                 dd:   pad(d),
-                ddd:  day_names[D],
-                dddd: day_names[D + 7],
+                ddd:  D8.dayNames[D],
+                dddd: D8.dayNames[D + 7],
                 D:    D,
                 m:    m + 1,
                 mm:   pad(m + 1),
-                mmm:  month_names[m],
-                mmmm: month_names[m + 12],
+                mmm:  D8.monthNames[m],
+                mmmm: D8.monthNames[m + 12],
                 yy:   String(y).slice(2),
                 yyyy: y,
                 h:    H % 12 || 12,
@@ -241,6 +232,16 @@
         date.date = new Date();
         return date;
     }
+
+    D8.dayNames = [
+        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ]
+
+    D8.monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
 
     D8.getCalendarWeek = (function(year, month, day) {
         var a = Math.floor((14 - (month)) / 12);
