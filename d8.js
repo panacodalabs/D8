@@ -5,7 +5,7 @@
  * MIT Licensed
  *
  * @author Dominik Laubach
- * @version 0.2
+ * @version 0.3
  */
 
 var D8 = (function() {
@@ -180,19 +180,26 @@ var D8 = (function() {
 
     function getDatesOfCalendarWeek(startWeekOnMonday) {
         year = this.format('yyyy');
-        var newYear = D8.create('01/01/' + year);
-        var newYearWeekDay = newYear.format('D');
+        var oneDayInTheFirstWeek = D8.create('01/01/' + year);
 
-        var firstWeek = null;
-        if (startWeekOnMonday) {
-            firstWeek = newYearWeekDay == 1 ? newYear : newYear.addDays(8 - (newYearWeekDay == 0 ? 7 : newYearWeekDay));
+        var addRemoveNumber = -7;
+        if(oneDayInTheFirstWeek.getCalendarWeek() > 51) {
+            addRemoveNumber = 7;
+        }
+        while(oneDayInTheFirstWeek.getCalendarWeek() !== 1) {
+            oneDayInTheFirstWeek = oneDayInTheFirstWeek.addDays(addRemoveNumber);
+        }
+
+        var oneDayInTheFirstWeekWeekDay = parseInt(oneDayInTheFirstWeek.format('D'));
+        if(startWeekOnMonday) {
+            oneDayInTheFirstWeek = oneDayInTheFirstWeekWeekDay == 1 ? oneDayInTheFirstWeek : oneDayInTheFirstWeek.addDays(8 - (oneDayInTheFirstWeekWeekDay == 0 ? 7 : oneDayInTheFirstWeekWeekDay));
         } else {
-            firstWeek = newYearWeekDay == 0 ? newYear : newYear.addDays(7 - newYearWeekDay);
+            oneDayInTheFirstWeek = oneDayInTheFirstWeekWeekDay == 0 ? oneDayInTheFirstWeek : oneDayInTheFirstWeek.addDays(7 - oneDayInTheFirstWeekWeekDay);
         }
 
         var calendarWeek = this.getCalendarWeek();
 
-        var requiredWeek = firstWeek.addDays((calendarWeek - 1) * 7);
+        var requiredWeek = oneDayInTheFirstWeek.addDays((calendarWeek - 1) * 7);
 
         var dates = [];
         for (var i = 0; i < 7; i++) {
@@ -247,21 +254,27 @@ D8.getCalendarWeek = (function(year, month, day) {
     return calendarWeek;
 });
 
-D8.getDatesOfCalendarWeek = (function(calendarWeek, startWeekOnMonday, year) {
-    year = year && !isNaN(year) ? year : (this.date ? this.format('yyyy') : D8.now().format('yyyy'));
-    var newYear = this.create('01/01/' + year);
-    var newYearWeekDay = newYear.format('D');
+D8.getCalendarWeekByDate = (function(d) {
+    return D8.getCalendarWeek(d.format('yyyy'), d.format('mm'), d.format('dd'));
+});
 
-    var firstWeek = null;
-    if (startWeekOnMonday) {
-        firstWeek = newYearWeekDay == 1 ? newYear : newYear.addDays(8 - (newYearWeekDay == 0 ? 7 : newYearWeekDay));
-    } else {
-        firstWeek = newYearWeekDay == 0 ? newYear : newYear.addDays(7 - newYearWeekDay);
+D8.getDatesOfCalendarWeek = (function(calendarWeek, startWeekOnMonday, year) {
+    var firstDayOfYear = D8.create('01.01.' + year);
+
+    var inLastYear = firstDayOfYear.addDays(-8);
+
+    var cw = D8.getCalendarWeekByDate(inLastYear);
+
+    while(cw !== 1) {
+        inLastYear = inLastYear.addDays(1);
+        cw = D8.getCalendarWeekByDate(inLastYear);
     }
 
-    calendarWeek = calendarWeek ? calendarWeek : this.getCalendarWeek();
+    if(!startWeekOnMonday) {
+        inLastYear = inLastYear.addDays(-1);
+    }
 
-    var requiredWeek = firstWeek.addDays((calendarWeek - 1) * 7);
+    var requiredWeek = inLastYear.addDays((calendarWeek - 1) * 7);
 
     var dates = [];
     for (var i = 0; i < 7; i++) {
