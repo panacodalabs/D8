@@ -5,7 +5,7 @@
  * MIT Licensed
  *
  * @author Dominik Laubach
- * @version 0.3
+ * @version 0.4
  */
 
 var D8 = (function() {
@@ -13,7 +13,20 @@ var D8 = (function() {
     var date = null;
 
     function addDays(days) {
-        return this.addMilliseconds(days * 24 * 60 * 60 * 1000);
+        var targetTimeStamp = days * 86400000;
+        var targetDate =  D8.create(this.date.getTime() + targetTimeStamp);
+        var dstOffset;
+
+        if(targetDate.isDST() === false && this.isDST() === true) {
+            dstOffset = this.date.getTimezoneOffset() - targetDate.date.getTimezoneOffset();
+            targetTimeStamp -= (dstOffset ) * 60 * 1000;
+        }
+        else if(targetDate.isDST() === true && this.isDST() === false) {
+            dstOffset = targetDate.date.getTimezoneOffset() - this.date.getTimezoneOffset();
+            targetTimeStamp += (dstOffset ) * 60 * 1000;
+        }
+
+        return this.addMilliseconds(targetTimeStamp);
     }
 
     function addHours(hours) {
@@ -216,6 +229,17 @@ var D8 = (function() {
         return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
     }
 
+    // Daylight Saving Time aka Summertime
+    function isDST() {
+        var y = D8(new Date()).format('yyyy');
+
+        if(new D8('01.01.'+y).date.getTimezoneOffset() == this.date.getTimezoneOffset()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     return {
         date: new Date(),
         addDays: addDays,
@@ -230,7 +254,8 @@ var D8 = (function() {
         getCalendarWeek: getCalendarWeek,
         format: format,
         getDatesOfCalendarWeek: getDatesOfCalendarWeek,
-        isLeapYear: isLeapYear
+        isLeapYear: isLeapYear,
+        isDST: isDST
     };
 
 });
@@ -335,6 +360,16 @@ D8.isLeapYear = (function(year) {
         }
     } else {
         throw 'No year passed.';
+    }
+});
+
+// Daylight Saving Time aka Summertime
+D8.isDST = (function(dateString) {
+    var date = D8.create(dateString);
+    if(new Date(1).getTimezoneOffset() == date.date.getTimezoneOffset()) {
+        return false;
+    } else {
+        return true;
     }
 });
 
